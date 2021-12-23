@@ -39,10 +39,10 @@ const convertInstructionToArray = (data) => {
 const setStock = (stockInstruction) => {
     try {
         let instructionArray = convertInstructionToArray(stockInstruction)
-        const [setStock,...rest] = instructionArray 
-        let keyValue = [...rest]
-        for (var i = 0; i < keyValue.length; i+=2) {
-            currentStock[keyValue[i]] = parseInt(keyValue[i + 1]);
+        const [setStock,...rest] = instructionArray  // Destructing the array
+        let skuAndStockValueArr = [...rest]
+        for (var i = 0; i < skuAndStockValueArr.length; i+=2) {
+            currentStock[skuAndStockValueArr[i]] = parseInt(skuAndStockValueArr[i + 1]);
         }
         console.log(`Instruction:${setStock}`,currentStock)
     } catch (error) {
@@ -52,15 +52,15 @@ const setStock = (stockInstruction) => {
 const addStock = (stockInstruction) => {
     try {
         let instructionArray = convertInstructionToArray(stockInstruction)
-        const [addStock,...rest] = instructionArray
-        let keyValue = [...rest]
-        let newObj = getSKUAndStockInKeyValuePair(keyValue)
+        const [addStock,...rest] = instructionArray // Destructing the array
+        let skuAndStockValueArr = [...rest] 
+        let newObj = getSKUAndStockInKeyValuePair(skuAndStockValueArr)
         for (let key in newObj){
             if(currentStock.hasOwnProperty(key)){ // if the key exist update the value  for the key
                 currentStock[key] += newObj[key]
             } else { // Add to current stock
-                for (var i = 0; i < keyValue.length; i+=2) {
-                    currentStock[keyValue[i]] = parseInt(keyValue[i + 1]);
+                for (var i = 0; i < skuAndStockValueArr.length; i+=2) {
+                    currentStock[skuAndStockValueArr[i]] = parseInt(skuAndStockValueArr[i + 1]);
                 }
             }
         }
@@ -74,9 +74,9 @@ const addStock = (stockInstruction) => {
 const orderStock = (stockInstruction) => {
     try {
         let instructionArray = convertInstructionToArray(stockInstruction)
-        const [order, orderNo, ...rest] = instructionArray
-        let keyValue = [...rest]
-        let newObj = getSKUAndStockInKeyValuePair(keyValue)
+        const [order, orderNo, ...rest] = instructionArray // Destructing the array
+        let skuAndStockValueArr = [...rest]
+        let newObj = getSKUAndStockInKeyValuePair(skuAndStockValueArr)
         for (let key in newObj){
             if(currentStock.hasOwnProperty(key)){
                 currentStock[key] -= newObj[key]
