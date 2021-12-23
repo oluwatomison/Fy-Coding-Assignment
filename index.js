@@ -15,7 +15,7 @@ const getStockCommand = (data) => {
     }
 }
 // Converting array of strings into a key value pair
-const getSKUAndStockKeyValuePair = (data) => {
+const getSKUAndStockInKeyValuePair = (data) => {
     try {
         var newObj = {}; // hold the key value pair.
         for (var i = 0; i < data.length; i+=2) {
@@ -33,6 +33,7 @@ const convertInstructionToArray = (data) => {
     } catch (error) {
     }
 }
+
 
 // Function to set stock
 const setStock = (stockInstruction) => {
@@ -53,10 +54,14 @@ const addStock = (stockInstruction) => {
         let instructionArray = convertInstructionToArray(stockInstruction)
         const [addStock,...rest] = instructionArray
         let keyValue = [...rest]
-        let newObj = getSKUAndStockKeyValuePair(keyValue)
+        let newObj = getSKUAndStockInKeyValuePair(keyValue)
         for (let key in newObj){
-            if(currentStock.hasOwnProperty(key)){
+            if(currentStock.hasOwnProperty(key)){ // if the key exist update the value  for the key
                 currentStock[key] += newObj[key]
+            } else { // Add to current stock
+                for (var i = 0; i < keyValue.length; i+=2) {
+                    currentStock[keyValue[i]] = parseInt(keyValue[i + 1]);
+                }
             }
         }
         console.log(`Instruction:${addStock}`,currentStock)
@@ -71,11 +76,13 @@ const orderStock = (stockInstruction) => {
         let instructionArray = convertInstructionToArray(stockInstruction)
         const [order, orderNo, ...rest] = instructionArray
         let keyValue = [...rest]
-        let newObj = getSKUAndStockKeyValuePair(keyValue)
+        let newObj = getSKUAndStockInKeyValuePair(keyValue)
         for (let key in newObj){
             if(currentStock.hasOwnProperty(key)){
                 currentStock[key] -= newObj[key]
-            } 
+            } else { 
+                console.log ("Stock not found")
+            }
         }
         console.log(`Instruction:${order}`,currentStock)
     } catch (error) {
